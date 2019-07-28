@@ -1,0 +1,20 @@
+.covered player1 {
+    margin: 500px -500px;
+}
+
+.covered player2 {}
+
+#clickBtn1 {
+    position: absolute;
+    margin: 100px 40px;
+}
+
+#clickBtn2 {
+    position: absolute;
+    margin: 100px 1250px;
+}
+
+#groundCardDiv {
+    position: absolute;
+    margin: 15px 600px;
+}

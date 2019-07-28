@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="cards.css" rel="stylesheet">
+</head>
+
+<body>
+    <span class="covered player1"><img id="playerOneCard" src="coverdeck.PNG" alt="covered" align="bottom"></span>
+    <span class="covered player2"><img id="playerTwoCard" src="coverdeck.PNG" alt="covered" align="right"></span>
+
+
+
+    <div> <button type="button" id="clickBtn1">PLAY</button></div>
+    <div> <button type="button" id="clickBtn2">PLAY</button></div>
+    <div id="groundCardDiv">
+        <h3> Ground Card</h3><img id="groundCard" alt="groundCard">
+    </div>
+
+
+    <script>
+        function CardEngine() {
+            var heart = 1,
+                diamond = 1,
+                spade = 1,
+                club = 1;
+            var Deck = [],
+                Player1Cards = [],
+                Player2Cards = [],
+                GroundCards = [];
+            var countPopedCardsP1 = 0;
+            var countPopedCardsP2 = 0;
+
+
+            this.buildDeck = function() {
+
+                for (var j = 0; j < 52; j++) {
+                    if (j < 13) {
+                        Deck[j] = {
+                            type: "heart",
+                            number: heart
+                        };
+                        heart++;
+                    } else if (j < 26) {
+                        Deck[j] = {
+                            type: "diamond",
+                            number: diamond
+                        };
+                        diamond++;
+                    } else if (j < 39) {
+                        Deck[j] = {
+                            type: "spade",
+                            number: spade
+                        };
+                        spade++;
+                    } else if (j < 52) {
+                        Deck[j] = {
+                            type: "club",
+                            number: club
+                        };
+                        club++;
+                    }
+
+                }
+
+            }
+
+
+
+
+            this.shuffleDeck = function() {
+                var currentIndex = Deck.length;
+                var temporaryValue, randomIndex;
+
+                // While there remain elements to shuffle...
+                while (0 !== currentIndex) {
+
+                    // Pick a remaining element...
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex -= 1;
+
+                    // And swap it with the current element.
+                    temporaryValue = Deck[currentIndex];
+                    Deck[currentIndex] = Deck[randomIndex];
+                    Deck[randomIndex] = temporaryValue;
+                }
+
+                return Deck;
+
+            }
+
+
+            this.deal = function() {
+
+                for (var j = 0; j <= 25; j++) {
+                    Player1Cards[j] = Deck[j];
+
+                }
+                for (var j = 0; j <= 25; j++) {
+                    Player2Cards[j] = Deck[26 + j];
+                }
+                console.log(Player1Cards);
+                console.log(Player2Cards);
+
+            }
+
+            this.playerOneClick = function() {
+              
+                var imageCardOne = Player1Cards[Math.abs(25 - countPopedCardsP1)].number + Player1Cards[Math.abs(25 - countPopedCardsP1)].type;
+
+
+                document.getElementById("groundCard").setAttribute("src", imageCardOne + ".PNG");
+                document.getElementById("playerOneCard").setAttribute("src", imageCardOne + ".PNG");
+
+
+                GroundCards.push({
+                    type: Player1Cards[Math.abs(25 - countPopedCardsP1)].type,
+                    number: Player1Cards[Math.abs(25 - countPopedCardsP1)].number
+                });
+
+                Player1Cards.pop();
+                countPopedCardsP1++;
+
+                if (GroundCards.length >= 2) {
+                    console.log(" >= 2 cards on ground");
+
+                    if (GroundCards[GroundCards.length - 2].number == GroundCards[GroundCards.length - 1].number) {
+                        console.log("equal number");
+
+                        while (GroundCards.length != 0) {
+                            Player1Cards.push({
+                                type: GroundCards[GroundCards.length - 1].type,
+                                number: GroundCards[GroundCards.length - 1].number
+                            });
+                            GroundCards.pop();
+                            countPopedCardsP1--;
+                        }
+                        console.log("Player 1 Cards had been pushed");
+                        console.log(Player1Cards);
+
+                        // check if p2 is empty 
+                        if (Player2Cards.length == 0) {
+                            alert("Congrates , Player 2 wins");
+                            console.log("Congrates , Player 2 wins");
+                        }
+                    } else {
+                        console.log("not equal number");
+
+                        // check if P2 is empty
+                        if (Player2Cards.length == 0) {
+                            alert("Congrates , Player 2 wins");
+                            console.log("Congrates , Player 2 wins");
+                        }
+
+                    }
+                } else {
+                    console.log("Ground card has one object");
+
+                }
+
+
+            }
+
+            this.playerTwoClick = function() {
+                var i = 1;
+                var imageCardTwo = Player2Cards[Math.abs(25 - countPopedCardsP2)].number + Player2Cards[Math.abs(25 - countPopedCardsP2)].type;
+
+                document.getElementById("groundCard").setAttribute("src", imageCardTwo + ".PNG");
+                document.getElementById("playerTwoCard").setAttribute("src", imageCardTwo + ".PNG");
+
+
+                GroundCards.push({
+                    type: Player2Cards[Math.abs(25 - countPopedCardsP2)].type,
+                    number: Player2Cards[Math.abs(25 - countPopedCardsP2)].number
+                });
+
+                Player2Cards.pop();
+                countPopedCardsP2++;
+
+                if (GroundCards.length >= 2) {
+                    console.log(" >= 2 cards on ground");
+
+                    if (GroundCards[GroundCards.length - 2].number == GroundCards[GroundCards.length - 1].number) {
+                        console.log("equal number");
+
+                        while (GroundCards.length != 0) {
+                            Player2Cards.push({
+                                type: GroundCards[GroundCards.length - 1].type,
+                                number: GroundCards[GroundCards.length - 1].number
+                            });
+                            GroundCards.pop();
+                            i++;
+                            countPopedCardsP2--;
+                        }
+                        console.log("Player 2 Cards had been pushed");
+
+                        // check if P1 is empty 
+                        if (Player1Cards.length == 0) {
+                            alert("Congrates , Player 1 wins");
+                            console.log("Congrates , Player 1 wins");
+                        }
+                    } else {
+                        console.log("not equal number");
+
+                        // check if P1 is empty
+                        if (Player1Cards.length == 0) {
+                            alert("Congrates , Player 1 wins");
+                            console.log("Congrates , Player 1 wins");
+                        }
+                    }
+                } else {
+                    console.log("Ground card has one object");
+
+                }
+
+
+            }
+
+          
+        }
+
+        var card = new CardEngine();
+        card.buildDeck();
+        card.shuffleDeck();
+        card.deal();
+        document.getElementById("clickBtn1").addEventListener("click", function() {
+            card.playerOneClick(event)
+        });
+        document.getElementById("clickBtn2").addEventListener("click", function() {
+            card.playerTwoClick(event)
+        });
+         //Paused : عندي ايرور , أعيد حدوث السطر واذا الآري فرغت 
+
+            //Questions :
+            // Is calling CardEngine() onClick right ?
+            // How cai i know if deck is having just 6 elements, maybe !6*6 ? i can make sure if i write down an array has number + type as objects // with 6 elements then compared it with deck[] 
+            // How to debug from Brackets
+            // i think i should separate setDeck function from buildDeck function , how can i do it ?
+            //what's the porpose of object constructor & (this.) for it's variables 
+            // Is it ok to make function inside function as i did ?
+            // how to responsive btn play for player 2 ? (when i minimize page btn 2 not appear)
+            //Answered questions :
+            // variables above could be reached from object out of class (card)? variables inside functions can be reached by accesors (Get,Set)
+            // setDeck could be a property , search how to call a property . (by Accessors)
+
+    </script>
+
+</body></html>
+ 
